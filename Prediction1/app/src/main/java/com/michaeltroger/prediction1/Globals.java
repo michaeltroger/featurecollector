@@ -46,7 +46,7 @@ public abstract class Globals {
 	
 	public static final int NOTIFICATION_ID = 1;
 
-	public static final int SENSOR_ACCURACY_MICROSECONDS = 20000; // equals 50hz
+	//public static final int SENSOR_ACCURACY_MICROSECONDS = 20000; // equals 50hz
 	
   
 }

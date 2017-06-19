@@ -69,7 +69,7 @@ public class SensorsService extends Service implements SensorEventListener {
 				.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
 		mSensorManager.registerListener(this, mAccelerometer,
-				Globals.SENSOR_ACCURACY_MICROSECONDS);
+				SensorManager.SENSOR_DELAY_FASTEST);
 
 		Bundle extras = intent.getExtras();
 		mLabel = extras.getString(Globals.CLASS_LABEL_KEY);
