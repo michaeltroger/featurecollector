@@ -121,6 +121,8 @@ public class SensorsService extends Service implements SensorEventListener {
 			double max = Double.MIN_VALUE;
 
 			Double[] featureVector = new Double[65];
+			int[] recognizedActivityCounts = new int[4];
+			double time = System.currentTimeMillis();
 
 			while (true) {
 				try {
@@ -156,12 +158,22 @@ public class SensorsService extends Service implements SensorEventListener {
 						featureVector[64] = max;
 						Double p = WekaClassifier.classify(featureVector);
 
-						String featureV = "";
-						for (double d : featureVector) {
-							featureV += d + ", ";
+						int indexDetectedActivity = p.intValue();
+						recognizedActivityCounts[indexDetectedActivity]++;
+
+						double currentTime = System.currentTimeMillis();
+						if (currentTime >= time + 5000) {
+							time = currentTime;
+							int maxIndex = -1;
+							for (int i = 0; i < recognizedActivityCounts.length; i++) {
+								if (recognizedActivityCounts[i] > maxIndex) {
+									maxIndex = i;
+								}
+								recognizedActivityCounts[i] = 0;
+							}
+							Log.i("feature vector", LABELS[maxIndex]);
 						}
-						Log.i("feature vector", featureV);
-						Log.i("feature vector", LABELS[p.intValue()]);
+
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
