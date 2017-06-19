@@ -57,7 +57,7 @@ public class SensorsService extends Service implements SensorEventListener {
 	public void onCreate() {
 		super.onCreate();
 
-		mAccBuffer = new ArrayBlockingQueue<Double>(
+		mAccBuffer = new ArrayBlockingQueue<>(
 				Globals.ACCELEROMETER_BUFFER_CAPACITY);
 	}
 
@@ -80,7 +80,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		mServiceTaskType = Globals.SERVICE_TASK_TYPE_COLLECT;
 
 		// Create the container for attributes
-		ArrayList<Attribute> allAttr = new ArrayList<Attribute>();
+		ArrayList<Attribute> allAttr = new ArrayList<>();
 
 		// Adding FFT coefficient attributes
 		DecimalFormat df = new DecimalFormat("0000");
@@ -92,7 +92,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		allAttr.add(new Attribute(Globals.FEAT_MAX_LABEL));
 
 		// Declare a nominal attribute along with its candidate values
-		ArrayList<String> labelItems = new ArrayList<String>(3);
+		ArrayList<String> labelItems = new ArrayList<>(3);
 		labelItems.add(Globals.CLASS_LABEL_STANDING);
 		labelItems.add(Globals.CLASS_LABEL_WALKING);
 		labelItems.add(Globals.CLASS_LABEL_RUNNING);
@@ -168,13 +168,13 @@ public class SensorsService extends Service implements SensorEventListener {
 			while (true) {
 				try {
 					// need to check if the AsyncTask is cancelled or not in the while loop
-					if (isCancelled () == true)
+					if (isCancelled())
 				    {
 				        return null;
 				    }
 					
 					// Dumping buffer
-					accBlock[blockSize++] = mAccBuffer.take().doubleValue();
+					accBlock[blockSize++] = mAccBuffer.take();
 
 					if (blockSize == Globals.ACCELEROMETER_BLOCK_CAPACITY) {
 						blockSize = 0;
@@ -300,18 +300,18 @@ public class SensorsService extends Service implements SensorEventListener {
 			// offer.
 
 			try {
-				mAccBuffer.add(new Double(m));
+				mAccBuffer.add(m);
 			} catch (IllegalStateException e) {
 
 				// Exception happens when reach the capacity.
 				// Doubling the buffer. ListBlockingQueue has no such issue,
 				// But generally has worse performance
-				ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<Double>(
+				ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(
 						mAccBuffer.size() * 2);
 
 				mAccBuffer.drainTo(newBuf);
 				mAccBuffer = newBuf;
-				mAccBuffer.add(new Double(m));
+				mAccBuffer.add(m);
 			}
 		}
 	}
