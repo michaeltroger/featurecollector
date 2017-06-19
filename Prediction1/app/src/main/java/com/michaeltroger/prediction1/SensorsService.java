@@ -172,6 +172,12 @@ public class SensorsService extends Service implements SensorEventListener {
 								recognizedActivityCounts[i] = 0;
 							}
 							Log.i("feature vector", LABELS[maxIndex]);
+							//Put your all data using put extra
+
+							Intent broadcastIntent = new Intent();
+							broadcastIntent.putExtra("key", LABELS[maxIndex]);
+							broadcastIntent.setAction(Globals.ACTION_NAME);
+							sendBroadcast(broadcastIntent);
 						}
 
 					}
