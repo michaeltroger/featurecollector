@@ -5,13 +5,10 @@
  * 
  */
 
-package edu.dartmouth.cs.myrunscollector;
+package com.michaeltroger.prediction1;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import android.app.Notification;
@@ -27,7 +24,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.meapsoft.FFT;
 

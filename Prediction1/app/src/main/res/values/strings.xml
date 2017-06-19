@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Collector</string>
+    <string name="app_name">Prediction1</string>
     <string name="ui_collector_radio_standing_title">Standing</string>
     <string name="ui_collector_radio_walking_title">Walking</string>
     <string name="ui_collector_radio_running_title">Running</string>

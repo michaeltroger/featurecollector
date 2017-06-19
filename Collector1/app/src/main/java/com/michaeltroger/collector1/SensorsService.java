@@ -5,7 +5,7 @@
  * 
  */
 
-package edu.dartmouth.cs.myrunscollector;
+package com.michaeltroger.collector1;
 
 import java.io.File;
 import java.io.FileInputStream;

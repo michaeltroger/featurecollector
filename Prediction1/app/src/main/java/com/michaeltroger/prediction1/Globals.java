@@ -5,7 +5,7 @@
  * 
  */
 
-package edu.dartmouth.cs.myrunscollector;
+package com.michaeltroger.prediction1;
 
 
 // More on class on constants:
@@ -45,7 +45,8 @@ public abstract class Globals {
 	public static final int FEATURE_SET_CAPACITY = 10000;
 	
 	public static final int NOTIFICATION_ID = 1;
-	
+
 	public static final int SENSOR_ACCURACY_MICROSECONDS = 20000; // equals 50hz
+	
   
 }

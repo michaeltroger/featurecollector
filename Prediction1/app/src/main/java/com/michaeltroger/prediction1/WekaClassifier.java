@@ -1,4 +1,4 @@
-package edu.dartmouth.cs.myrunscollector;
+package com.michaeltroger.prediction1;
 
 // Generated with Weka 3.8.1
 // This code is public domain and comes with no warranty.
