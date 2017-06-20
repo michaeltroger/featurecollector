@@ -74,21 +74,6 @@
 
 \RequirePackage[figure,table,table*]{hypcap}	% do not redefine figure* for use in article (without captions)
 
-%% Math Stuff -----------------------------------------------------------------
-
-\RequirePackage{amsmath,amsfonts,amssymb,amsbsy}
-\RequirePackage{subdepth}			% for positioning of sub and super scripts
-\RequirePackage{exscale}			% correct scaling of math mode output in every environment
-
-% Commands for real, complex, etc. numbers (AMS Blackboard)
-\newcommand{\R}{\ensuremath{\mathbb{R}}}
-\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
-\newcommand{\N}{\ensuremath{\mathbb{N}}}
-%\newcommand{\C}{\mathbb{C}} % utf8-change (problem with T1 encoding)
-\newcommand{\Cpx}{\ensuremath{\mathbb{C}}}	% utf8-change
-\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
-
-
 %% Language environments ------------------------------------------------------
 
 % Switch from German to English (babel)
@@ -111,9 +96,8 @@
   \noindent\makebox[\textwidth]{\rule{4cm}{0.4pt}}
   \vskip 2.5ex}
 
-% Creates a new and non-indented paragraph with additional spacing
-\newcommand{\SuperPar}[0]{% 
-\par\bigskip\noindent%
+\newcommand{\SuperPar}[0]{%
+\PackageWarning{hgb}{Due to frequent misuse, macro 'SuperPar' has been removed.}
 }
 
 % Test box for print proofing
@@ -254,9 +238,15 @@
 }}%
 {\end{list}}
 
+\providecommand{\hgb@PathName}{Pfad}
+
 \newenvironment{FileList}[1]%
-{\paragraph{Pfad:} \url{#1}
- \begin{list}{}%
+{%\paragraph{Pfad:} \url{#1}
+\ifthenelse{\equal{\hgb@MainLanguage}{german}}
+	{\renewcommand{\hgb@PathName}{Pfad}}%
+	{\renewcommand{\hgb@PathName}{Path}}%
+\paragraph{\hgb@PathName: \nolinkurl{#1}}
+\begin{list}{}%
 {\setlength{\leftmargin}{5cm}
  \setlength{\labelwidth}{4cm}
  \setlength{\labelsep}{0.25cm}
@@ -272,7 +262,7 @@
 \def\widedotfill{\leaders\hbox to 8pt{\hfil.\hfil}\hfill}
 
 \newcommand{\fitem}[1]{%
-\item[\url{#1}\widedotfill]
+\item[\nolinkurl{#1}\widedotfill]
 }
 
 \setlength{\fboxsep}{0mm}			%globally zero fbox separator

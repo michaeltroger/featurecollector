@@ -76,8 +76,9 @@
 %% Paper Options and Style File -----------------------------------------------
 
 \LoadClass[a4paper,11pt,oneside]{book}
+\usepackage[top=36mm,bottom=40mm,left=32mm,right=32mm]{geometry} %showframe
  
-\RequirePackage{hgb}	% load associated style file hgb.sty
+\usepackage{hgb}	% load associated style file hgb.sty
 
 
 %% Setup for Pages in the Front Matter ----------------------------------------
@@ -604,6 +605,7 @@ This work is published under the conditions of the
 
 %% Additional Hagenberg packages ----------------------------------------------
 
+\usepackage{hgbmath}
 \usepackage{hgbheadings}
 \usepackage{hgbabbrev}
 \usepackage{hgblistings}
