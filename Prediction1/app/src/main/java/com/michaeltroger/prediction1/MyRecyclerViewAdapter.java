@@ -10,6 +10,9 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
     private List<String> mData = Collections.emptyList();
@@ -46,12 +49,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView myTextView;
+        @BindView(R.id.tvActivityName)
+        TextView myTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            myTextView = (TextView) itemView.findViewById(R.id.tvActivityName);
             itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         @Override

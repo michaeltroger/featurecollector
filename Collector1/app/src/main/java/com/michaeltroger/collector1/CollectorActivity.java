@@ -13,117 +13,127 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class CollectorActivity extends Activity {
 
-	private enum State {
-		IDLE, COLLECTING, TRAINING, CLASSIFYING
-	};
+    @BindView(R.id.radioStanding)
+    RadioButton radioStanding;
+    @BindView(R.id.radioWalking)
+    RadioButton radioWalking;
+    @BindView(R.id.radioRunning)
+    RadioButton radioRunning;
+    @BindView(R.id.radioOther)
+    RadioButton radioOther;
+    @BindView(R.id.radioGroupLabels)
+    RadioGroup radioGroupLabels;
+    @BindView(R.id.btnCollect)
+    Button btnCollect;
+    @BindView(R.id.btnDeleteData)
+    Button btnDeleteData;
 
-	private final String[] mLabels = { Globals.CLASS_LABEL_STANDING,
-			Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
-			Globals.CLASS_LABEL_OTHER };
+    private enum State {
+        IDLE, COLLECTING, TRAINING, CLASSIFYING
+    }
 
-	private RadioGroup radioGroup;
-	private final RadioButton[] radioBtns = new RadioButton[4];
-	private Intent mServiceIntent;
-	private File mFeatureFile;
+    private final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
+            Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
+            Globals.CLASS_LABEL_OTHER};
 
-	private State mState;
-	private Button btnDelete;
+    private Intent mServiceIntent;
+    private File mFeatureFile;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		radioGroup = (RadioGroup) findViewById(R.id.radioGroupLabels);
-		radioBtns[0] = (RadioButton) findViewById(R.id.radioStanding);
-		radioBtns[1] = (RadioButton) findViewById(R.id.radioWalking);
-		radioBtns[2] = (RadioButton) findViewById(R.id.radioRunning);
-		radioBtns[3] = (RadioButton) findViewById(R.id.radioOther);
+    private State mState;
 
-		btnDelete = (Button) findViewById(R.id.btnDeleteData);
+    @OnClick(R.id.btnCollect)
+    public void onBtnCollectClicked(Button button) {
+        if (mState == State.IDLE) {
+            mState = State.COLLECTING;
+            button.setText(R.string.ui_collector_button_stop_title);
+            btnDeleteData.setEnabled(false);
+            radioStanding.setEnabled(false);
+            radioWalking.setEnabled(false);
+            radioRunning.setEnabled(false);
+            radioOther.setEnabled(false);
 
-		mState = State.IDLE;
-		mFeatureFile = new File(getExternalFilesDir(null),
-				Globals.FEATURE_FILE_NAME);
-		mServiceIntent = new Intent(this, SensorsService.class);
-	}
+            int acvitivtyId = radioGroupLabels.indexOfChild(findViewById(radioGroupLabels
+                    .getCheckedRadioButtonId()));
+            String label = mLabels[acvitivtyId];
 
-	public void onCollectClicked(View view) {
+            Bundle extras = new Bundle();
+            extras.putString(Globals.CLASS_LABEL_KEY, label);
+            mServiceIntent.putExtras(extras);
 
-		if (mState == State.IDLE) {
-			mState = State.COLLECTING;
-			((Button) view).setText(R.string.ui_collector_button_stop_title);
-			btnDelete.setEnabled(false);
-			radioBtns[0].setEnabled(false);
-			radioBtns[1].setEnabled(false);
-			radioBtns[2].setEnabled(false);
-			radioBtns[3].setEnabled(false);
+            startService(mServiceIntent);
 
-			int acvitivtyId = radioGroup.indexOfChild(findViewById(radioGroup
-					.getCheckedRadioButtonId()));
-			String label = mLabels[acvitivtyId];
+        } else if (mState == State.COLLECTING) {
+            mState = State.IDLE;
+            button.setText(R.string.ui_collector_button_start_title);
+            btnDeleteData.setEnabled(true);
+            radioStanding.setEnabled(true);
+            radioWalking.setEnabled(true);
+            radioRunning.setEnabled(true);
+            radioOther.setEnabled(true);
 
-			Bundle extras = new Bundle();
-			extras.putString(Globals.CLASS_LABEL_KEY, label);
-			mServiceIntent.putExtras(extras);
+            stopService(mServiceIntent);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
+        }
+    }
 
-			startService(mServiceIntent);
+    @OnClick(R.id.btnDeleteData)
+    public void onBtnDeleteDataClicked() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment
+                .getExternalStorageState())) {
+            if (mFeatureFile.exists()) {
+                mFeatureFile.delete();
+            }
 
-		} else if (mState == State.COLLECTING) {
-			mState = State.IDLE;
-			((Button) view).setText(R.string.ui_collector_button_start_title);
-			btnDelete.setEnabled(true);
-			radioBtns[0].setEnabled(true);
-			radioBtns[1].setEnabled(true);
-			radioBtns[2].setEnabled(true);
-			radioBtns[3].setEnabled(true);
+            Toast.makeText(getApplicationContext(),
+                    R.string.ui_collector_toast_file_deleted,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-			stopService(mServiceIntent);
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
-		}
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        ButterKnife.bind(this);
 
-	public void onDeleteDataClicked(View view) {
+        mState = State.IDLE;
+        mFeatureFile = new File(getExternalFilesDir(null),
+                Globals.FEATURE_FILE_NAME);
+        mServiceIntent = new Intent(this, SensorsService.class);
+    }
 
-		if (Environment.MEDIA_MOUNTED.equals(Environment
-				.getExternalStorageState())) {
-			if (mFeatureFile.exists()) {
-				mFeatureFile.delete();
-			}
+    @Override
+    public void onBackPressed() {
 
-			Toast.makeText(getApplicationContext(),
-					R.string.ui_collector_toast_file_deleted,
-					Toast.LENGTH_SHORT).show();
-		}
-	}
+        if (mState == State.TRAINING) {
+            return;
+        } else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
+            stopService(mServiceIntent);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                    .cancel(Globals.NOTIFICATION_ID);
+        }
+        super.onBackPressed();
+    }
 
-	@Override
-	public void onBackPressed() {
-
-		if (mState == State.TRAINING) {
-			return;
-		} else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
-			stopService(mServiceIntent);
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-					.cancel(Globals.NOTIFICATION_ID);
-		}
-		super.onBackPressed();
-	}
-
-	@Override
-	public void onDestroy() {
-		// Stop the service and the notification.
-		// Need to check whether the mSensorService is null or not.
-		if (mState == State.TRAINING) {
-			return;
-		} else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
-			stopService(mServiceIntent);
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-					.cancelAll();
-		}
-		finish();
-		super.onDestroy();
-	}
+    @Override
+    public void onDestroy() {
+        // Stop the service and the notification.
+        // Need to check whether the mSensorService is null or not.
+        if (mState == State.TRAINING) {
+            return;
+        } else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
+            stopService(mServiceIntent);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                    .cancelAll();
+        }
+        finish();
+        super.onDestroy();
+    }
 
 }

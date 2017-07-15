@@ -15,107 +15,109 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class CollectorActivity extends Activity {
-	private MyRecyclerViewAdapter adapter;
-	private BroadcastReceiver mBroadcastReceiver;
-	private final ArrayList<String> animalNames =  new ArrayList<>();
+    @BindView(R.id.rvActivities)
+    RecyclerView rvActivities;
 
-	public void onClearClicked(View view) {
-		animalNames.clear();
-		adapter.notifyDataSetChanged();
-	}
+    private MyRecyclerViewAdapter adapter;
+    private BroadcastReceiver mBroadcastReceiver;
+    private final ArrayList<String> animalNames = new ArrayList<>();
+    private Intent mServiceIntent;
+    private State mState;
 
-	private enum State {
-		IDLE, COLLECTING, TRAINING, CLASSIFYING
-	}
+    @OnClick(R.id.btnRecognize)
+    public void onBtnRecognizeClicked(Button button) {
+        Log.d("TAG", "collecting");
+        if (mState == State.IDLE) {
+            mState = State.COLLECTING;
+            button.setText(R.string.ui_collector_button_stop_title);
 
-	private final String[] mLabels = { Globals.CLASS_LABEL_STANDING,
-			Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
-			Globals.CLASS_LABEL_OTHER };
+            Bundle extras = new Bundle();
+            mServiceIntent.putExtras(extras);
 
-	private Intent mServiceIntent;
+            startService(mServiceIntent);
 
-	private State mState;
+        } else if (mState == State.COLLECTING) {
+            mState = State.IDLE;
+            button.setText(R.string.ui_collector_button_start_title);
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+            stopService(mServiceIntent);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
+        }
+    }
 
-		mState = State.IDLE;
-		mServiceIntent = new Intent(this, SensorsService.class);
+    @OnClick(R.id.btnClear)
+    public void onBtnClearClicked() {
+        animalNames.clear();
+        adapter.notifyDataSetChanged();
+    }
 
-		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rvActivities);
-		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-		adapter = new MyRecyclerViewAdapter(this, animalNames);
-		recyclerView.setAdapter(adapter);
+    private enum State {
+        IDLE, COLLECTING, TRAINING, CLASSIFYING
+    }
 
-		IntentFilter filter = new IntentFilter(Globals.ACTION_NAME);
-		mBroadcastReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				String activity = intent.getStringExtra("key");
-				animalNames.add(activity);
-				adapter.notifyDataSetChanged();
-			}
-		};
-		registerReceiver(mBroadcastReceiver, filter);
+    private final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
+            Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
+            Globals.CLASS_LABEL_OTHER};
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        ButterKnife.bind(this);
 
+        mState = State.IDLE;
+        mServiceIntent = new Intent(this, SensorsService.class);
 
+        rvActivities.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyRecyclerViewAdapter(this, animalNames);
+        rvActivities.setAdapter(adapter);
 
-
-
-	}
-
-	public void onRecognizeClicked(View view) {
-		Log.d("TAG", "collecting");
-		if (mState == State.IDLE) {
-			mState = State.COLLECTING;
-			((Button) view).setText(R.string.ui_collector_button_stop_title);
-
-			Bundle extras = new Bundle();
-			mServiceIntent.putExtras(extras);
-
-			startService(mServiceIntent);
-
-		} else if (mState == State.COLLECTING) {
-			mState = State.IDLE;
-			((Button) view).setText(R.string.ui_collector_button_start_title);
-
-			stopService(mServiceIntent);
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
-		}
-	}
+        IntentFilter filter = new IntentFilter(Globals.ACTION_NAME);
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String activity = intent.getStringExtra("key");
+                animalNames.add(activity);
+                adapter.notifyDataSetChanged();
+            }
+        };
+        registerReceiver(mBroadcastReceiver, filter);
 
 
-	@Override
-	public void onBackPressed() {
+    }
 
-		if (mState == State.TRAINING) {
-			return;
-		} else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
-			stopService(mServiceIntent);
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-					.cancel(Globals.NOTIFICATION_ID);
-		}
-		super.onBackPressed();
-	}
+    @Override
+    public void onBackPressed() {
 
-	@Override
-	public void onDestroy() {
-		// Stop the service and the notification.
-		// Need to check whether the mSensorService is null or not.
-		if (mState == State.TRAINING) {
-			return;
-		} else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
-			stopService(mServiceIntent);
-			((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-					.cancelAll();
-		}
-		this.unregisterReceiver(mBroadcastReceiver);
-		finish();
-		super.onDestroy();
-	}
+        if (mState == State.TRAINING) {
+            return;
+        } else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
+            stopService(mServiceIntent);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                    .cancel(Globals.NOTIFICATION_ID);
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onDestroy() {
+        // Stop the service and the notification.
+        // Need to check whether the mSensorService is null or not.
+        if (mState == State.TRAINING) {
+            return;
+        } else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
+            stopService(mServiceIntent);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                    .cancelAll();
+        }
+        this.unregisterReceiver(mBroadcastReceiver);
+        finish();
+        super.onDestroy();
+    }
 
 }
