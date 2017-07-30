@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,6 +18,9 @@ import butterknife.OnClick;
 
 public class CollectorActivity extends Activity {
 
+    private final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
+            Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
+            Globals.CLASS_LABEL_OTHER};
     @BindView(R.id.radioStanding)
     RadioButton radioStanding;
     @BindView(R.id.radioWalking)
@@ -33,18 +35,8 @@ public class CollectorActivity extends Activity {
     Button btnCollect;
     @BindView(R.id.btnDeleteData)
     Button btnDeleteData;
-
-    private enum State {
-        IDLE, COLLECTING, TRAINING, CLASSIFYING
-    }
-
-    private final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
-            Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
-            Globals.CLASS_LABEL_OTHER};
-
     private Intent mServiceIntent;
     private File mFeatureFile;
-
     private State mState;
 
     @OnClick(R.id.btnCollect)
@@ -134,6 +126,10 @@ public class CollectorActivity extends Activity {
         }
         finish();
         super.onDestroy();
+    }
+
+    private enum State {
+        IDLE, COLLECTING, TRAINING, CLASSIFYING
     }
 
 }

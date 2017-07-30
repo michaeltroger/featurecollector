@@ -1,0 +1,26 @@
+
+=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Wsquid:S1854"=Remove this useless assignment to local variable "toastDisp".(üÄÈşÿÿÿÿ
+\squid:S00112"FDefine and throw a dedicated exception instead of using a generic one.(Î¢›‘
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÏÓŞ–
+4squid:S2131"Use "Integer.toString" instead.(‚ƒéÿ
+4squid:S2131"Use "Integer.toString" instead.(¢Î¾ò
+4squid:S2131"Use "Integer.toString" instead.(åÌ¨Ó
+rsquid:S1450"]Remove the "mAccelerometer" field and declare it as a local variable in the relevant methods.(ŸÔ®
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Äùÿÿÿÿÿ
+=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¯åÇ©úÿÿÿÿ
+Psquid:S2696"6Make the enclosing method "static" or remove this set.(×¶´ôùÿÿÿÿ
+Qsquid:S1854"7Remove this useless assignment to local variable "max".(×˜Äèüÿÿÿÿ
+[squid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Äùÿÿÿÿÿ
+Psquid:S2696"6Make the enclosing method "static" or remove this set.(İˆÎøÿÿÿÿ
+–squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ĞŠß±
+=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Q
+squid:S899"8Do something with the "int" value returned by "drainTo".(é ÿ†şÿÿÿÿ
+usquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ÔşË†şÿÿÿÿ
+gsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‰„çö
+=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+T
+squid:S899";Do something with the "boolean" value returned by "delete".(©ùãšüÿÿÿÿ
