@@ -15,13 +15,23 @@ import java.io.File;
 
 public class CollectorActivity extends Activity {
 
-    private final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
-            Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
-            Globals.CLASS_LABEL_OTHER};
+    private static final String[] mLabels = {
+            Globals.CLASS_LABEL_STANDING,
+            Globals.CLASS_LABEL_WALKING,
+            Globals.CLASS_LABEL_RUNNING,
+            Globals.CLASS_LABEL_OTHER
+    };
     private MainBinding binding;
     private Intent mServiceIntent;
     private File mFeatureFile;
     private State mState;
+
+    private enum State {
+        IDLE,
+        COLLECTING,
+        TRAINING,
+        CLASSIFYING
+    }
 
     public class MyHandlers {
         public void onBtnCollectClicked(View view) {
@@ -34,11 +44,12 @@ public class CollectorActivity extends Activity {
                 binding.radioRunning.setEnabled(false);
                 binding.radioOther.setEnabled(false);
 
-                int acvitivtyId = binding.radioGroupLabels.indexOfChild(findViewById(binding.radioGroupLabels
-                        .getCheckedRadioButtonId()));
-                String label = mLabels[acvitivtyId];
+                final int acvitivtyId = binding.radioGroupLabels.indexOfChild(
+                        findViewById(binding.radioGroupLabels.getCheckedRadioButtonId())
+                );
+                final String label = mLabels[acvitivtyId];
 
-                Bundle extras = new Bundle();
+                final Bundle extras = new Bundle();
                 extras.putString(Globals.CLASS_LABEL_KEY, label);
                 mServiceIntent.putExtras(extras);
 
@@ -78,12 +89,11 @@ public class CollectorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         binding = DataBindingUtil.setContentView(this, R.layout.main);
-        MyHandlers handlers = new MyHandlers();
+        final MyHandlers handlers = new MyHandlers();
         binding.setHandlers(handlers);
 
         mState = State.IDLE;
-        mFeatureFile = new File(getExternalFilesDir(null),
-                Globals.FEATURE_FILE_NAME);
+        mFeatureFile = new File(getExternalFilesDir(null), Globals.FEATURE_FILE_NAME);
         mServiceIntent = new Intent(this, SensorsService.class);
     }
 
@@ -94,8 +104,7 @@ public class CollectorActivity extends Activity {
             return;
         } else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
             stopService(mServiceIntent);
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                    .cancel(Globals.NOTIFICATION_ID);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(Globals.NOTIFICATION_ID);
         }
         super.onBackPressed();
     }
@@ -108,15 +117,10 @@ public class CollectorActivity extends Activity {
             return;
         } else if (mState == State.COLLECTING || mState == State.CLASSIFYING) {
             stopService(mServiceIntent);
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                    .cancelAll();
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
         }
         finish();
         super.onDestroy();
-    }
-
-    private enum State {
-        IDLE, COLLECTING, TRAINING, CLASSIFYING
     }
 
 }

@@ -71,7 +71,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		mSensorManager.registerListener(this, mAccelerometer,
 				SensorManager.SENSOR_DELAY_FASTEST);
 
-		Bundle extras = intent.getExtras();
+		final Bundle extras = intent.getExtras();
 		mLabel = extras.getString(Globals.CLASS_LABEL_KEY);
 
 		mFeatureFile = new File(getExternalFilesDir(null), Globals.FEATURE_FILE_NAME);
@@ -80,10 +80,10 @@ public class SensorsService extends Service implements SensorEventListener {
 		mServiceTaskType = Globals.SERVICE_TASK_TYPE_COLLECT;
 
 		// Create the container for attributes
-		ArrayList<Attribute> allAttr = new ArrayList<>();
+		final ArrayList<Attribute> allAttr = new ArrayList<>();
 
 		// Adding FFT coefficient attributes
-		DecimalFormat df = new DecimalFormat("0000");
+		final DecimalFormat df = new DecimalFormat("0000");
 
 		for (int i = 0; i < Globals.ACCELEROMETER_BLOCK_CAPACITY; i++) {
 			allAttr.add(new Attribute(Globals.FEAT_FFT_COEF_LABEL + df.format(i)));
@@ -92,7 +92,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		allAttr.add(new Attribute(Globals.FEAT_MAX_LABEL));
 
 		// Declare a nominal attribute along with its candidate values
-		ArrayList<String> labelItems = new ArrayList<>(3);
+		final ArrayList<String> labelItems = new ArrayList<>(3);
 		labelItems.add(Globals.CLASS_LABEL_STANDING);
 		labelItems.add(Globals.CLASS_LABEL_WALKING);
 		labelItems.add(Globals.CLASS_LABEL_RUNNING);
@@ -108,15 +108,15 @@ public class SensorsService extends Service implements SensorEventListener {
 		// index for classification
 		mDataset.setClassIndex(mDataset.numAttributes() - 1);
 
-		Intent i = new Intent(this, CollectorActivity.class);
+		final Intent i = new Intent(this, CollectorActivity.class);
 		// Read:
 		// http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
 		// IMPORTANT!. no re-create activity
 		i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-		PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+		final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-		Notification notification = new Notification.Builder(this)
+		final Notification notification = new Notification.Builder(this)
 				.setContentTitle(
 						getApplicationContext().getString(
 								R.string.ui_sensor_service_notification_title))
@@ -125,7 +125,7 @@ public class SensorsService extends Service implements SensorEventListener {
 								.getString(
 										R.string.ui_sensor_service_notification_content))
 				.setSmallIcon(R.drawable.greend).setContentIntent(pi).build();
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notification.flags = notification.flags
 				| Notification.FLAG_ONGOING_EVENT;
 		notificationManager.notify(0, notification);
@@ -155,13 +155,13 @@ public class SensorsService extends Service implements SensorEventListener {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
-			Instance inst = new DenseInstance(mFeatLen);
+			final Instance inst = new DenseInstance(mFeatLen);
 			inst.setDataset(mDataset);
 			int blockSize = 0;
-			FFT fft = new FFT(Globals.ACCELEROMETER_BLOCK_CAPACITY);
-			double[] accBlock = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
-			double[] re = accBlock;
-			double[] im = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
+			final FFT fft = new FFT(Globals.ACCELEROMETER_BLOCK_CAPACITY);
+			final double[] accBlock = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
+			final double[] re = accBlock;
+			final double[] im = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
 
 			double max = Double.MIN_VALUE;
 
@@ -181,7 +181,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 						// time = System.currentTimeMillis();
 						max = .0;
-						for (double val : accBlock) {
+						for (final double val : accBlock) {
 							if (max < val) {
 								max = val;
 							}
@@ -190,7 +190,7 @@ public class SensorsService extends Service implements SensorEventListener {
 						fft.fft(re, im);
 
 						for (int i = 0; i < re.length; i++) {
-							double mag = Math.sqrt(re[i] * re[i] + im[i]
+							final double mag = Math.sqrt(re[i] * re[i] + im[i]
 									* im[i]);
 							inst.setValue(i, mag);
 							im[i] = .0; // Clear the field
@@ -223,14 +223,14 @@ public class SensorsService extends Service implements SensorEventListener {
 			if (mFeatureFile.exists()) {
 
 				// merge existing and delete the old dataset
-				DataSource source;
+				final DataSource source;
 				try {
 					// Create a datasource from mFeatureFile where
 					// mFeatureFile = new File(getExternalFilesDir(null),
 					// "features.arff");
 					source = new DataSource(new FileInputStream(mFeatureFile));
 					// Read the dataset set out of this datasource
-					Instances oldDataset = source.getDataSet();
+					final Instances oldDataset = source.getDataSet();
 					oldDataset.setClassIndex(mDataset.numAttributes() - 1);
 					// Sanity checking if the dataset format matches.
 					if (!oldDataset.equalHeaders(mDataset)) {
@@ -259,7 +259,7 @@ public class SensorsService extends Service implements SensorEventListener {
 			}
 			Log.i("save","create saver here");
 			// create new Arff file
-			ArffSaver saver = new ArffSaver();
+			final ArffSaver saver = new ArffSaver();
 			// Set the data source of the file content
 			saver.setInstances(mDataset);
 			Log.e("1234", mDataset.size()+"");
@@ -288,7 +288,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 
-			double m = Math.sqrt(event.values[0] * event.values[0]
+			final double m = Math.sqrt(event.values[0] * event.values[0]
 					+ event.values[1] * event.values[1] + event.values[2]
 					* event.values[2]);
 
@@ -306,7 +306,7 @@ public class SensorsService extends Service implements SensorEventListener {
 				// Exception happens when reach the capacity.
 				// Doubling the buffer. ListBlockingQueue has no such issue,
 				// But generally has worse performance
-				ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(
+				final ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(
 						mAccBuffer.size() * 2);
 
 				mAccBuffer.drainTo(newBuf);
