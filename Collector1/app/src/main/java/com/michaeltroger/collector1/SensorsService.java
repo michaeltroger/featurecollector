@@ -128,8 +128,7 @@ public class SensorsService extends Service implements SensorEventListener {
 										R.string.ui_sensor_service_notification_content))
 				.setSmallIcon(R.drawable.greend).setContentIntent(pi).build();
 		final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notification.flags = notification.flags
-				| Notification.FLAG_ONGOING_EVENT;
+		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
 		notificationManager.notify(0, notification);
 
 
