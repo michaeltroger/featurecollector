@@ -26,4 +26,5 @@ dependencies {
     compile files('libs/weka.jar')
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.google.guava:guava:23.0-android'
 }

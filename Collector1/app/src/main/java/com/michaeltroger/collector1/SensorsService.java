@@ -49,7 +49,7 @@ public class SensorsService extends Service implements SensorEventListener {
 	private String mLabel;
 	private Instances mDataset;
 	private Attribute mClassAttribute;
-	private CreateFeatureVectorTask createFeatureVectorTask;
+	private FeatureVectorTask featureVectorTask;
 
 	private static final String[] LABELS = {
 			Globals.CLASS_LABEL_STANDING,
@@ -134,8 +134,8 @@ public class SensorsService extends Service implements SensorEventListener {
 		notificationManager.notify(0, notification);
 
 
-		createFeatureVectorTask = new CreateFeatureVectorTask();
-		createFeatureVectorTask.execute();
+		featureVectorTask = new FeatureVectorTask();
+		featureVectorTask.execute();
 		samplingTask = new SamplingTask();
 		samplingTask.execute();
 
@@ -144,7 +144,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 	@Override
 	public void onDestroy() {
-		createFeatureVectorTask.cancel(true);
+		featureVectorTask.cancel(true);
 		samplingTask.cancel(true);
 		try {
 			Thread.sleep(100);
@@ -171,7 +171,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 				if (currentTimeMillis >= startTimeMillis + Globals.SAMPLING_RATE_MILLIS) {
 					startTimeMillis = currentTimeMillis;
-					double cachedValue = cachedAccValue.get();
+					final double cachedValue = cachedAccValue.get();
 					try {
 						mAccBuffer.add(cachedValue);
 					} catch (IllegalStateException e) {
@@ -186,7 +186,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		}
 	}
 
-	private class CreateFeatureVectorTask extends AsyncTask<Void, Void, Void> {
+	private class FeatureVectorTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 

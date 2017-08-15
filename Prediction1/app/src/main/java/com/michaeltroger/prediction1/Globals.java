@@ -18,7 +18,6 @@ public abstract class Globals {
 	
 	
 	public static final int ACCELEROMETER_BUFFER_CAPACITY = 2048;
-	public static final int ACCELEROMETER_BLOCK_CAPACITY = 64;
 	
 	public static final int ACTIVITY_ID_STANDING = 0;
 	public static final int ACTIVITY_ID_WALKING = 1;
@@ -46,6 +45,10 @@ public abstract class Globals {
 	
 	public static final int NOTIFICATION_ID = 1;
 	public static final String ACTION_NAME = "UPDATE_VIEW";
+
+	public static final int SAMPLING_RATE_MILLIS = 20;
+	public static final int WINDOW_MILLIS = 5120;
+	public static final int ACCELEROMETER_BLOCK_CAPACITY = WINDOW_MILLIS / SAMPLING_RATE_MILLIS;
 
 	//public static final int SENSOR_ACCURACY_MICROSECONDS = 20000; // equals 50hz
 	

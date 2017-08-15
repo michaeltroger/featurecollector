@@ -23,8 +23,8 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.meapsoft.FFT;
 
 public class SensorsService extends Service implements SensorEventListener {
@@ -36,7 +36,7 @@ public class SensorsService extends Service implements SensorEventListener {
 	private Sensor mAccelerometer;
 	private int mServiceTaskType;
 	private String mLabel;
-	private OnSensorChangedTask mAsyncTask;
+	private FeatureVectorTask featureVectorTask;
 	private static final String[] LABELS = {
             Globals.CLASS_LABEL_STANDING,
             Globals.CLASS_LABEL_WALKING,
@@ -44,10 +44,12 @@ public class SensorsService extends Service implements SensorEventListener {
             Globals.CLASS_LABEL_OTHER
 	};
 
+    private AtomicDouble cachedAccValue = new AtomicDouble();
 	private static ArrayBlockingQueue<Double> mAccBuffer;
 	public static final DecimalFormat mdf = new DecimalFormat("#.##");
+    private SamplingTask samplingTask;
 
-	@Override
+    @Override
 	public void onCreate() {
 		super.onCreate();
 
@@ -89,15 +91,18 @@ public class SensorsService extends Service implements SensorEventListener {
 		notificationManager.notify(0, notification);
 
 
-		mAsyncTask = new OnSensorChangedTask();
-		mAsyncTask.execute();
+		featureVectorTask = new FeatureVectorTask();
+		featureVectorTask.execute();
+        samplingTask = new SamplingTask();
+        samplingTask.execute();
 
 		return START_NOT_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
-		mAsyncTask.cancel(true);
+		featureVectorTask.cancel(true);
+        samplingTask.cancel(true);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -108,7 +113,37 @@ public class SensorsService extends Service implements SensorEventListener {
 
 	}
 
-	private class OnSensorChangedTask extends AsyncTask<Void, Void, Void> {
+    private class SamplingTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            long startTimeMillis = System.currentTimeMillis();
+
+            while (true) {
+                if (isCancelled()) {
+                    return null;
+                }
+
+                final long currentTimeMillis = System.currentTimeMillis();
+
+                if (currentTimeMillis >= startTimeMillis + Globals.SAMPLING_RATE_MILLIS) {
+                    startTimeMillis = currentTimeMillis;
+                    final double cachedValue = cachedAccValue.get();
+                    try {
+                        mAccBuffer.add(cachedValue);
+                    } catch (IllegalStateException e) {
+                        final ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
+
+                        mAccBuffer.drainTo(newBuf);
+                        mAccBuffer = newBuf;
+                        mAccBuffer.add(cachedValue);
+                    }
+                }
+            }
+        }
+    }
+
+	private class FeatureVectorTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
@@ -120,7 +155,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 			double max = Double.MIN_VALUE;
 
-			final Double[] featureVector = new Double[65];
+			final Double[] featureVector = new Double[Globals.ACCELEROMETER_BLOCK_CAPACITY+1];
 			int[] recognizedActivityCounts = new int[4];
 			double time = System.currentTimeMillis();
 
@@ -153,7 +188,7 @@ public class SensorsService extends Service implements SensorEventListener {
 						}
 
 						// Append max after frequency component
-						featureVector[64] = max;
+						featureVector[Globals.ACCELEROMETER_BLOCK_CAPACITY] = max;
 						final Double p = WekaClassifier.classify(featureVector);
 
 						int indexDetectedActivity = p.intValue();
@@ -189,23 +224,11 @@ public class SensorsService extends Service implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 
 		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-
-			final double m = Math.sqrt(
+			cachedAccValue.set(Math.sqrt(
 					event.values[0] * event.values[0]
 					+ event.values[1] * event.values[1]
 					+ event.values[2] * event.values[2]
-			);
-
-
-			try {
-				mAccBuffer.add(m);
-			} catch (IllegalStateException e) {
-				final ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
-
-				mAccBuffer.drainTo(newBuf);
-				mAccBuffer = newBuf;
-				mAccBuffer.add(m);
-			}
+			));
 		}
 	}
 
