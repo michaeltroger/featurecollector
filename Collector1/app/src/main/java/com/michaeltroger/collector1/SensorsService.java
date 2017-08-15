@@ -74,7 +74,6 @@ public class SensorsService extends Service implements SensorEventListener {
 		mLabel = extras.getString(Globals.CLASS_LABEL_KEY);
 
 		mFeatureFile = new File(getExternalFilesDir(null), Globals.FEATURE_FILE_NAME);
-		Log.d(Globals.TAG, mFeatureFile.getAbsolutePath());
 
 		mServiceTaskType = Globals.SERVICE_TASK_TYPE_COLLECT;
 
@@ -145,7 +144,6 @@ public class SensorsService extends Service implements SensorEventListener {
 			e.printStackTrace();
 		}
 		mSensorManager.unregisterListener(this);
-		Log.i("","");
 		super.onDestroy();
 
 	}
@@ -199,7 +197,6 @@ public class SensorsService extends Service implements SensorEventListener {
 						inst.setValue(Globals.ACCELEROMETER_BLOCK_CAPACITY, max);
 						inst.setValue(mClassAttribute, mLabel);
 						mDataset.add(inst);
-						Log.i("new instance", mDataset.size() + "");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -209,14 +206,10 @@ public class SensorsService extends Service implements SensorEventListener {
 
 		@Override
 		protected void onCancelled() {
-			
-			Log.e("123", mDataset.size()+"");
-			
 			if (mServiceTaskType == Globals.SERVICE_TASK_TYPE_CLASSIFY) {
 				super.onCancelled();
 				return;
 			}
-			Log.i("in the loop","still in the loop cancelled");
 			String toastDisp;
 
 			if (mFeatureFile.exists()) {
@@ -233,8 +226,6 @@ public class SensorsService extends Service implements SensorEventListener {
 					oldDataset.setClassIndex(mDataset.numAttributes() - 1);
 					// Sanity checking if the dataset format matches.
 					if (!oldDataset.equalHeaders(mDataset)) {
-						// Log.d(Globals.TAG,
-						// oldDataset.equalHeadersMsg(mDataset));
 						throw new Exception(
 								"The two datasets have different headers:\n");
 					}
@@ -247,7 +238,6 @@ public class SensorsService extends Service implements SensorEventListener {
 					mDataset = oldDataset;
 					// Delete the existing old file.
 					mFeatureFile.delete();
-					Log.i("delete","delete the file");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -256,12 +246,10 @@ public class SensorsService extends Service implements SensorEventListener {
 			} else {
 				toastDisp = getString(R.string.ui_sensor_service_toast_success_file_created)   ;
 			}
-			Log.i("save","create saver here");
 			// create new Arff file
 			final ArffSaver saver = new ArffSaver();
 			// Set the data source of the file content
 			saver.setInstances(mDataset);
-			Log.e("1234", mDataset.size()+"");
 			try {
 				// Set the destination of the file.
 				// mFeatureFile = new File(getExternalFilesDir(null),
@@ -269,15 +257,13 @@ public class SensorsService extends Service implements SensorEventListener {
 				saver.setFile(mFeatureFile);
 				// Write into the file
 				saver.writeBatch();
-				Log.i("batch","write batch here");
 				Toast.makeText(getApplicationContext(), toastDisp,
 						Toast.LENGTH_SHORT).show();
 			} catch (IOException e) {
 				toastDisp = getString(R.string.ui_sensor_service_toast_error_file_saving_failed);
 				e.printStackTrace();
 			}
-			
-			Log.i("toast","toast here");
+
 			super.onCancelled();
 		}
 

@@ -37,7 +37,12 @@ public class SensorsService extends Service implements SensorEventListener {
 	private int mServiceTaskType;
 	private String mLabel;
 	private OnSensorChangedTask mAsyncTask;
-	private final static String[] LABELS = {Globals.CLASS_LABEL_STANDING, Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING, Globals.CLASS_LABEL_OTHER};
+	private static final String[] LABELS = {
+            Globals.CLASS_LABEL_STANDING,
+            Globals.CLASS_LABEL_WALKING,
+            Globals.CLASS_LABEL_RUNNING,
+            Globals.CLASS_LABEL_OTHER
+	};
 
 	private static ArrayBlockingQueue<Double> mAccBuffer;
 	public static final DecimalFormat mdf = new DecimalFormat("#.##");
@@ -102,7 +107,6 @@ public class SensorsService extends Service implements SensorEventListener {
 			e.printStackTrace();
 		}
 		mSensorManager.unregisterListener(this);
-		Log.i("","");
 		super.onDestroy();
 
 	}
@@ -170,7 +174,6 @@ public class SensorsService extends Service implements SensorEventListener {
 								}
 								recognizedActivityCounts[i] = 0;
 							}
-							Log.i("feature vector", LABELS[maxIndex]);
 							//Put your all data using put extra
 
 							final Intent broadcastIntent = new Intent();
@@ -188,7 +191,6 @@ public class SensorsService extends Service implements SensorEventListener {
 
 		@Override
 		protected void onCancelled() {
-
 			super.onCancelled();
 		}
 
