@@ -96,10 +96,10 @@
       <file leaf-file-name="SensorsService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/SensorsService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="778">
-              <caret line="295" column="83" selection-start-line="295" selection-start-column="83" selection-end-line="295" selection-end-column="83" />
+            <state relative-caret-position="360">
+              <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
               <folding>
-                <element signature="e#7994#8062#0" expanded="true" />
+                <element signature="e#7985#8053#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -120,8 +120,8 @@
       <file leaf-file-name="CollectorActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/CollectorActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="51" column="51" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+            <state relative-caret-position="-126">
+              <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1914,8 +1914,8 @@
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/Globals.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/main.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/CollectorActivity.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/CollectorActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/SensorsService.java" />
       </list>
     </option>
@@ -2459,16 +2459,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/CollectorActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -2517,7 +2507,7 @@
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
           <folding>
-            <element signature="e#7994#8062#0" expanded="true" />
+            <element signature="e#7985#8053#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2590,7 +2580,7 @@
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
           <folding>
-            <element signature="e#7994#8062#0" expanded="true" />
+            <element signature="e#7985#8053#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2663,7 +2653,7 @@
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
           <folding>
-            <element signature="e#7994#8062#0" expanded="true" />
+            <element signature="e#7985#8053#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2736,7 +2726,7 @@
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
           <folding>
-            <element signature="e#7994#8062#0" expanded="true" />
+            <element signature="e#7985#8053#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2809,7 +2799,7 @@
         <state relative-caret-position="468">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
           <folding>
-            <element signature="e#7994#8062#0" expanded="true" />
+            <element signature="e#7985#8053#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2909,10 +2899,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/Android/Sdk/platforms/android-26/android.jar!/java/util/concurrent/ArrayBlockingQueue.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="927">
+          <caret line="92" column="15" selection-start-line="92" selection-start-column="15" selection-end-line="92" selection-end-column="15" />
+          <folding>
+            <element signature="e#2340#2341#0" expanded="true" />
+            <element signature="e#2391#2392#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/CollectorActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="51" column="51" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
+        <state relative-caret-position="-126">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -2921,10 +2922,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/SensorsService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="778">
-          <caret line="295" column="83" selection-start-line="295" selection-start-column="83" selection-end-line="295" selection-end-column="83" />
+        <state relative-caret-position="360">
+          <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
           <folding>
-            <element signature="e#7994#8062#0" expanded="true" />
+            <element signature="e#7985#8053#0" expanded="true" />
           </folding>
         </state>
       </provider>
