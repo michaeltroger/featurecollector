@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="handlers" type="com.michaeltroger.collector1.CollectorActivity.MyHandlers"/>
+    </data>
+<LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -48,6 +52,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:onClick="@{handlers::onBtnCollectClicked}"
         android:text="@string/ui_collector_button_start_title" />
 
     <Button
@@ -55,6 +60,8 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:onClick="@{handlers::onBtnDeleteDataClicked}"
         android:text="@string/ui_collector_button_delete_title" />
 
 </LinearLayout>
+</layout>

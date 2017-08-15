@@ -3,96 +3,83 @@ package com.michaeltroger.collector1;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.view.View;
 import android.widget.Toast;
 
-import java.io.File;
+import com.michaeltroger.collector1.databinding.MainBinding;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import java.io.File;
 
 public class CollectorActivity extends Activity {
 
     private final String[] mLabels = {Globals.CLASS_LABEL_STANDING,
             Globals.CLASS_LABEL_WALKING, Globals.CLASS_LABEL_RUNNING,
             Globals.CLASS_LABEL_OTHER};
-    @BindView(R.id.radioStanding)
-    RadioButton radioStanding;
-    @BindView(R.id.radioWalking)
-    RadioButton radioWalking;
-    @BindView(R.id.radioRunning)
-    RadioButton radioRunning;
-    @BindView(R.id.radioOther)
-    RadioButton radioOther;
-    @BindView(R.id.radioGroupLabels)
-    RadioGroup radioGroupLabels;
-    @BindView(R.id.btnCollect)
-    Button btnCollect;
-    @BindView(R.id.btnDeleteData)
-    Button btnDeleteData;
+    private MainBinding binding;
     private Intent mServiceIntent;
     private File mFeatureFile;
     private State mState;
 
-    @OnClick(R.id.btnCollect)
-    public void onBtnCollectClicked(Button button) {
-        if (mState == State.IDLE) {
-            mState = State.COLLECTING;
-            button.setText(R.string.ui_collector_button_stop_title);
-            btnDeleteData.setEnabled(false);
-            radioStanding.setEnabled(false);
-            radioWalking.setEnabled(false);
-            radioRunning.setEnabled(false);
-            radioOther.setEnabled(false);
+    public class MyHandlers {
+        public void onBtnCollectClicked(View view) {
+            if (mState == State.IDLE) {
+                mState = State.COLLECTING;
+                binding.btnCollect.setText(R.string.ui_collector_button_stop_title);
+                binding.btnDeleteData.setEnabled(false);
+                binding.radioStanding.setEnabled(false);
+                binding.radioWalking.setEnabled(false);
+                binding.radioRunning.setEnabled(false);
+                binding.radioOther.setEnabled(false);
 
-            int acvitivtyId = radioGroupLabels.indexOfChild(findViewById(radioGroupLabels
-                    .getCheckedRadioButtonId()));
-            String label = mLabels[acvitivtyId];
+                int acvitivtyId = binding.radioGroupLabels.indexOfChild(findViewById(binding.radioGroupLabels
+                        .getCheckedRadioButtonId()));
+                String label = mLabels[acvitivtyId];
 
-            Bundle extras = new Bundle();
-            extras.putString(Globals.CLASS_LABEL_KEY, label);
-            mServiceIntent.putExtras(extras);
+                Bundle extras = new Bundle();
+                extras.putString(Globals.CLASS_LABEL_KEY, label);
+                mServiceIntent.putExtras(extras);
 
-            startService(mServiceIntent);
+                startService(mServiceIntent);
 
-        } else if (mState == State.COLLECTING) {
-            mState = State.IDLE;
-            button.setText(R.string.ui_collector_button_start_title);
-            btnDeleteData.setEnabled(true);
-            radioStanding.setEnabled(true);
-            radioWalking.setEnabled(true);
-            radioRunning.setEnabled(true);
-            radioOther.setEnabled(true);
+            } else if (mState == State.COLLECTING) {
+                mState = State.IDLE;
+                binding.btnCollect.setText(R.string.ui_collector_button_start_title);
+                binding.btnDeleteData.setEnabled(true);
+                binding.radioStanding.setEnabled(true);
+                binding.radioWalking.setEnabled(true);
+                binding.radioRunning.setEnabled(true);
+                binding.radioOther.setEnabled(true);
 
-            stopService(mServiceIntent);
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
-        }
-    }
-
-    @OnClick(R.id.btnDeleteData)
-    public void onBtnDeleteDataClicked() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment
-                .getExternalStorageState())) {
-            if (mFeatureFile.exists()) {
-                mFeatureFile.delete();
+                stopService(mServiceIntent);
+                ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancelAll();
             }
+        }
 
-            Toast.makeText(getApplicationContext(),
-                    R.string.ui_collector_toast_file_deleted,
-                    Toast.LENGTH_SHORT).show();
+        public void onBtnDeleteDataClicked(View view) {
+            if (Environment.MEDIA_MOUNTED.equals(Environment
+                    .getExternalStorageState())) {
+                if (mFeatureFile.exists()) {
+                    mFeatureFile.delete();
+                }
+
+                Toast.makeText(getApplicationContext(),
+                        R.string.ui_collector_toast_file_deleted,
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        ButterKnife.bind(this);
+        binding = DataBindingUtil.setContentView(this, R.layout.main);
+        MyHandlers handlers = new MyHandlers();
+        binding.setHandlers(handlers);
 
         mState = State.IDLE;
         mFeatureFile = new File(getExternalFilesDir(null),
