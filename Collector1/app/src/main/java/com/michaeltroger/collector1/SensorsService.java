@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import weka.core.Attribute;
@@ -49,6 +50,13 @@ public class SensorsService extends Service implements SensorEventListener {
 	private Instances mDataset;
 	private Attribute mClassAttribute;
 	private OnSensorChangedTask mAsyncTask;
+
+	private static final String[] LABELS = {
+			Globals.CLASS_LABEL_STANDING,
+			Globals.CLASS_LABEL_WALKING,
+			Globals.CLASS_LABEL_RUNNING,
+			Globals.CLASS_LABEL_OTHER
+	};
 
 	private static ArrayBlockingQueue<Double> mAccBuffer;
 	public static final DecimalFormat mdf = new DecimalFormat("#.##");
@@ -90,11 +98,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		allAttr.add(new Attribute(Globals.FEAT_MAX_LABEL));
 
 		// Declare a nominal attribute along with its candidate values
-		final ArrayList<String> labelItems = new ArrayList<>(3);
-		labelItems.add(Globals.CLASS_LABEL_STANDING);
-		labelItems.add(Globals.CLASS_LABEL_WALKING);
-		labelItems.add(Globals.CLASS_LABEL_RUNNING);
-		labelItems.add(Globals.CLASS_LABEL_OTHER);
+		final ArrayList<String> labelItems = new ArrayList<>(Arrays.asList(LABELS));
 		mClassAttribute = new Attribute(Globals.CLASS_LABEL_KEY, labelItems);
 		allAttr.add(mClassAttribute);
 
