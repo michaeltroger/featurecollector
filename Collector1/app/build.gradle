@@ -24,4 +24,5 @@ android {
 
 dependencies {
     compile files('libs/weka.jar')
+    compile 'com.google.guava:guava:23.0-android'
 }

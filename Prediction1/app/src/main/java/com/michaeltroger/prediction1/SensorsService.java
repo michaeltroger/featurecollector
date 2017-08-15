@@ -126,9 +126,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 			while (true) {
 				try {
-					// need to check if the AsyncTask is cancelled or not in the while loop
-					if (isCancelled())
-				    {
+					if (isCancelled()) {
 				        return null;
 				    }
 					
@@ -186,11 +184,6 @@ public class SensorsService extends Service implements SensorEventListener {
 			}
 		}
 
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-		}
-
 	}
 
 	public void onSensorChanged(SensorEvent event) {
@@ -203,21 +196,11 @@ public class SensorsService extends Service implements SensorEventListener {
 					+ event.values[2] * event.values[2]
 			);
 
-			// Inserts the specified element into this queue if it is possible
-			// to do so immediately without violating capacity restrictions,
-			// returning true upon success and throwing an IllegalStateException
-			// if no space is currently available. When using a
-			// capacity-restricted queue, it is generally preferable to use
-			// offer.
 
 			try {
 				mAccBuffer.add(m);
 			} catch (IllegalStateException e) {
-
-				// Exception happens when reach the capacity.
-				// Doubling the buffer. ListBlockingQueue has no such issue,
-				// But generally has worse performance
-				ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
+				final ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
 
 				mAccBuffer.drainTo(newBuf);
 				mAccBuffer = newBuf;

@@ -33,9 +33,9 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.Toast;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.meapsoft.FFT;
 
 public class SensorsService extends Service implements SensorEventListener {
@@ -49,7 +49,7 @@ public class SensorsService extends Service implements SensorEventListener {
 	private String mLabel;
 	private Instances mDataset;
 	private Attribute mClassAttribute;
-	private OnSensorChangedTask mAsyncTask;
+	private CreateFeatureVectorTask createFeatureVectorTask;
 
 	private static final String[] LABELS = {
 			Globals.CLASS_LABEL_STANDING,
@@ -58,8 +58,12 @@ public class SensorsService extends Service implements SensorEventListener {
 			Globals.CLASS_LABEL_OTHER
 	};
 
+
+	private AtomicDouble cachedAccValue = new AtomicDouble();
+
 	private static ArrayBlockingQueue<Double> mAccBuffer;
 	public static final DecimalFormat mdf = new DecimalFormat("#.##");
+	private SamplingTask samplingTask;
 
 	@Override
 	public void onCreate() {
@@ -130,15 +134,18 @@ public class SensorsService extends Service implements SensorEventListener {
 		notificationManager.notify(0, notification);
 
 
-		mAsyncTask = new OnSensorChangedTask();
-		mAsyncTask.execute();
+		createFeatureVectorTask = new CreateFeatureVectorTask();
+		createFeatureVectorTask.execute();
+		samplingTask = new SamplingTask();
+		samplingTask.execute();
 
 		return START_NOT_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
-		mAsyncTask.cancel(true);
+		createFeatureVectorTask.cancel(true);
+		samplingTask.cancel(true);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -149,7 +156,37 @@ public class SensorsService extends Service implements SensorEventListener {
 
 	}
 
-	private class OnSensorChangedTask extends AsyncTask<Void, Void, Void> {
+	private class SamplingTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... voids) {
+			long startTimeMillis = System.currentTimeMillis();
+
+			while (true) {
+				if (isCancelled()) {
+					return null;
+				}
+
+				final long currentTimeMillis = System.currentTimeMillis();
+
+				if (currentTimeMillis >= startTimeMillis + Globals.SAMPLING_RATE_MILLIS) {
+					startTimeMillis = currentTimeMillis;
+					double cachedValue = cachedAccValue.get();
+					try {
+						mAccBuffer.add(cachedValue);
+					} catch (IllegalStateException e) {
+						final ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
+
+						mAccBuffer.drainTo(newBuf);
+						mAccBuffer = newBuf;
+						mAccBuffer.add(cachedValue);
+					}
+				}
+			}
+		}
+	}
+
+	private class CreateFeatureVectorTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
@@ -165,7 +202,6 @@ public class SensorsService extends Service implements SensorEventListener {
 
 			while (true) {
 				try {
-					// need to check if the AsyncTask is cancelled or not in the while loop
 					if (isCancelled())
 				    {
 				        return null;
@@ -188,8 +224,7 @@ public class SensorsService extends Service implements SensorEventListener {
 						fft.fft(re, im);
 
 						for (int i = 0; i < re.length; i++) {
-							final double mag = Math.sqrt(re[i] * re[i] + im[i]
-									* im[i]);
+							final double mag = Math.sqrt(re[i] * re[i] + im[i] * im[i]);
 							inst.setValue(i, mag);
 							im[i] = .0; // Clear the field
 						}
@@ -272,33 +307,11 @@ public class SensorsService extends Service implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 
 		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-
-			final double m = Math.sqrt(
+			cachedAccValue.set(Math.sqrt(
 					event.values[0] * event.values[0]
 					+ event.values[1] * event.values[1]
 					+ event.values[2] * event.values[2]
-			);
-
-			// Inserts the specified element into this queue if it is possible
-			// to do so immediately without violating capacity restrictions,
-			// returning true upon success and throwing an IllegalStateException
-			// if no space is currently available. When using a
-			// capacity-restricted queue, it is generally preferable to use
-			// offer.
-
-			try {
-				mAccBuffer.add(m);
-			} catch (IllegalStateException e) {
-
-				// Exception happens when reach the capacity.
-				// Doubling the buffer. ListBlockingQueue has no such issue,
-				// But generally has worse performance
-				final ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
-
-				mAccBuffer.drainTo(newBuf);
-				mAccBuffer = newBuf;
-				mAccBuffer.add(m);
-			}
+			));
 		}
 	}
 
