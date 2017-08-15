@@ -219,8 +219,7 @@ public class SensorsService extends Service implements SensorEventListener {
 				// Exception happens when reach the capacity.
 				// Doubling the buffer. ListBlockingQueue has no such issue,
 				// But generally has worse performance
-				ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<Double>(
-						mAccBuffer.size() * 2);
+				ArrayBlockingQueue<Double> newBuf = new ArrayBlockingQueue<>(mAccBuffer.size() * 2);
 
 				mAccBuffer.drainTo(newBuf);
 				mAccBuffer = newBuf;
