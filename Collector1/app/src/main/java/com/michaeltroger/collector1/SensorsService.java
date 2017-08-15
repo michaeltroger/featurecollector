@@ -273,9 +273,11 @@ public class SensorsService extends Service implements SensorEventListener {
 
 		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 
-			final double m = Math.sqrt(event.values[0] * event.values[0]
-					+ event.values[1] * event.values[1] + event.values[2]
-					* event.values[2]);
+			final double m = Math.sqrt(
+					event.values[0] * event.values[0]
+					+ event.values[1] * event.values[1]
+					+ event.values[2] * event.values[2]
+			);
 
 			// Inserts the specified element into this queue if it is possible
 			// to do so immediately without violating capacity restrictions,
