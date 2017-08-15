@@ -89,8 +89,7 @@ public class CollectorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         binding = DataBindingUtil.setContentView(this, R.layout.main);
-        final MyHandlers handlers = new MyHandlers();
-        binding.setHandlers(handlers);
+        binding.setHandlers(new MyHandlers());
 
         mState = State.IDLE;
         mFeatureFile = new File(getExternalFilesDir(null), Globals.FEATURE_FILE_NAME);

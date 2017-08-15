@@ -1,0 +1,24 @@
+
+hsquid:ModifiersOrderCheck"EReorder the modifiers to comply with the Java Language Specification.(­Ïè
+Fsquid:S1068",Remove this unused "mFeatLen" private field.(ÔşË†şÿÿÿÿ
+Esquid:S1068"0Remove this unused "mFeatureFile" private field.(ƒ£ğ
+Isquid:S1068"4Remove this unused "mServiceTaskType" private field.(çÎÁî
+Dsquid:S1068"*Remove this unused "mLabel" private field.(ŸÖ£íÿÿÿÿÿ
+ssquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ì¥«Óşÿÿÿÿ
+nsquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Î™«
+rsquid:S1450"]Remove the "mAccelerometer" field and declare it as a local variable in the relevant methods.(ŸÔ®
+tsquid:S1450"_Remove the "mServiceTaskType" field and declare it as a local variable in the relevant methods.(çÎÁî
+osquid:S1450"URemove the "mLabel" field and declare it as a local variable in the relevant methods.(ŸÖ£íÿÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¯åÇ©úÿÿÿÿ
+Psquid:S2696"6Make the enclosing method "static" or remove this set.(Ì¥«Óşÿÿÿÿ
+Psquid:S2696"6Make the enclosing method "static" or remove this set.(İˆÎøÿÿÿÿ
+gsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(‰„çö
+[squid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€
+–squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ĞŠß±
+=squid:S1185"(Remove this method to simply inherit it.(¨‚è
+Qsquid:S1854"7Remove this useless assignment to local variable "max".(×˜Äèüÿÿÿÿ
+usquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ÔşË†şÿÿÿÿ
+=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Q
+squid:S899"8Do something with the "int" value returned by "drainTo".(é ÿ†şÿÿÿÿ

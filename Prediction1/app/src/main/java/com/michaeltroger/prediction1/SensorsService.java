@@ -46,8 +46,7 @@ public class SensorsService extends Service implements SensorEventListener {
 	public void onCreate() {
 		super.onCreate();
 
-		mAccBuffer = new ArrayBlockingQueue<Double>(
-				Globals.ACCELEROMETER_BUFFER_CAPACITY);
+		mAccBuffer = new ArrayBlockingQueue<>(Globals.ACCELEROMETER_BUFFER_CAPACITY);
 	}
 
 	@Override
@@ -60,20 +59,20 @@ public class SensorsService extends Service implements SensorEventListener {
 		mSensorManager.registerListener(this, mAccelerometer,
 				SensorManager.SENSOR_DELAY_FASTEST);
 
-		Bundle extras = intent.getExtras();
+		final Bundle extras = intent.getExtras();
 		mLabel = extras.getString(Globals.CLASS_LABEL_KEY);
 
 		mServiceTaskType = Globals.SERVICE_TASK_TYPE_COLLECT;
 
-		Intent i = new Intent(this, CollectorActivity.class);
+		final Intent i = new Intent(this, CollectorActivity.class);
 		// Read:
 		// http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
 		// IMPORTANT!. no re-create activity
 		i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-		PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+		final PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
 
-		Notification notification = new Notification.Builder(this)
+		final Notification notification = new Notification.Builder(this)
 				.setContentTitle(
 						getApplicationContext().getString(
 								R.string.ui_sensor_service_notification_title))
@@ -82,7 +81,7 @@ public class SensorsService extends Service implements SensorEventListener {
 								.getString(
 										R.string.ui_sensor_service_notification_content))
 				.setSmallIcon(R.drawable.greend).setContentIntent(pi).build();
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notification.flags = notification.flags
 				| Notification.FLAG_ONGOING_EVENT;
 		notificationManager.notify(0, notification);
@@ -113,14 +112,14 @@ public class SensorsService extends Service implements SensorEventListener {
 		protected Void doInBackground(Void... arg0) {
 
 			int blockSize = 0;
-			FFT fft = new FFT(Globals.ACCELEROMETER_BLOCK_CAPACITY);
-			double[] accBlock = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
-			double[] re = accBlock;
-			double[] im = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
+			final FFT fft = new FFT(Globals.ACCELEROMETER_BLOCK_CAPACITY);
+			final double[] accBlock = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
+			final double[] re = accBlock;
+			final double[] im = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
 
 			double max = Double.MIN_VALUE;
 
-			Double[] featureVector = new Double[65];
+			final Double[] featureVector = new Double[65];
 			int[] recognizedActivityCounts = new int[4];
 			double time = System.currentTimeMillis();
 
@@ -140,7 +139,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 						// time = System.currentTimeMillis();
 						max = .0;
-						for (double val : accBlock) {
+						for (final double val : accBlock) {
 							if (max < val) {
 								max = val;
 							}
@@ -156,12 +155,12 @@ public class SensorsService extends Service implements SensorEventListener {
 
 						// Append max after frequency component
 						featureVector[64] = max;
-						Double p = WekaClassifier.classify(featureVector);
+						final Double p = WekaClassifier.classify(featureVector);
 
 						int indexDetectedActivity = p.intValue();
 						recognizedActivityCounts[indexDetectedActivity]++;
 
-						double currentTime = System.currentTimeMillis();
+						final double currentTime = System.currentTimeMillis();
 						if (currentTime >= time + 5000) {
 							time = currentTime;
 							int maxIndex = -1;
@@ -174,7 +173,7 @@ public class SensorsService extends Service implements SensorEventListener {
 							Log.i("feature vector", LABELS[maxIndex]);
 							//Put your all data using put extra
 
-							Intent broadcastIntent = new Intent();
+							final Intent broadcastIntent = new Intent();
 							broadcastIntent.putExtra("key", LABELS[maxIndex]);
 							broadcastIntent.setAction(Globals.ACTION_NAME);
 							sendBroadcast(broadcastIntent);
@@ -199,9 +198,11 @@ public class SensorsService extends Service implements SensorEventListener {
 
 		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 
-			double m = Math.sqrt(event.values[0] * event.values[0]
+			final double m = Math.sqrt(
+					event.values[0] * event.values[0]
 					+ event.values[1] * event.values[1]
-					+ event.values[2] * event.values[2]);
+					+ event.values[2] * event.values[2]
+			);
 
 			// Inserts the specified element into this queue if it is possible
 			// to do so immediately without violating capacity restrictions,

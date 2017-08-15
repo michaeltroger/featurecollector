@@ -57,8 +57,7 @@ public class SensorsService extends Service implements SensorEventListener {
 	public void onCreate() {
 		super.onCreate();
 
-		mAccBuffer = new ArrayBlockingQueue<>(
-				Globals.ACCELEROMETER_BUFFER_CAPACITY);
+		mAccBuffer = new ArrayBlockingQueue<>(Globals.ACCELEROMETER_BUFFER_CAPACITY);
 	}
 
 	@Override
