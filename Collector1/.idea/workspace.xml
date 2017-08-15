@@ -96,9 +96,11 @@
       <file leaf-file-name="SensorsService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/SensorsService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="135" column="29" selection-start-line="135" selection-start-column="29" selection-end-line="135" selection-end-column="29" />
-              <folding />
+            <state relative-caret-position="839">
+              <caret line="256" column="34" selection-start-line="256" selection-start-column="34" selection-end-line="256" selection-end-column="34" />
+              <folding>
+                <element signature="e#7994#8062#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -2514,7 +2516,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#7994#8062#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2585,7 +2589,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#7994#8062#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2656,7 +2662,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#7994#8062#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2727,7 +2735,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#7994#8062#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2798,7 +2808,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="468">
           <caret line="59" column="46" selection-start-line="59" selection-start-column="46" selection-end-line="59" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="e#7994#8062#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2909,9 +2921,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/michaeltroger/collector1/SensorsService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="135" column="29" selection-start-line="135" selection-start-column="29" selection-end-line="135" selection-end-column="29" />
-          <folding />
+        <state relative-caret-position="839">
+          <caret line="256" column="34" selection-start-line="256" selection-start-column="34" selection-end-line="256" selection-end-column="34" />
+          <folding>
+            <element signature="e#7994#8062#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

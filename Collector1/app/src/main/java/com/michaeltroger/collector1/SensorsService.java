@@ -260,12 +260,11 @@ public class SensorsService extends Service implements SensorEventListener {
 				saver.setFile(mFeatureFile);
 				// Write into the file
 				saver.writeBatch();
-				Toast.makeText(getApplicationContext(), toastDisp,
-						Toast.LENGTH_SHORT).show();
 			} catch (IOException e) {
 				toastDisp = getString(R.string.ui_sensor_service_toast_error_file_saving_failed);
 				e.printStackTrace();
 			}
+			Toast.makeText(getApplicationContext(), toastDisp, Toast.LENGTH_SHORT).show();
 
 			super.onCancelled();
 		}
