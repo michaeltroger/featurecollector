@@ -169,12 +169,6 @@ public class SensorsService extends Service implements SensorEventListener {
 			final Double[] featureVector = new Double[Globals.ACCELEROMETER_BLOCK_CAPACITY+1];
 			final Double[] featureVector2 = new Double[Globals.ACCELEROMETER_BLOCK_CAPACITY+1];
 
-			int[] recognizedActivityCounts = new int[4];
-			int[] recognizedActivityCounts2 = new int[4];
-
-			double time = System.currentTimeMillis();
-			double time2 = System.currentTimeMillis();
-
 			while (true) {
 				try {
 					if (isCancelled()) {
@@ -216,26 +210,13 @@ public class SensorsService extends Service implements SensorEventListener {
 						featureVector[Globals.ACCELEROMETER_BLOCK_CAPACITY] = max;
 						final Double p = WekaClassifier.classify(featureVector);
 
-						int indexDetectedActivity = p.intValue();
-						recognizedActivityCounts[indexDetectedActivity]++;
+						final int indexDetectedActivity = p.intValue();
 
-						final double currentTime = System.currentTimeMillis();
-						if (currentTime >= time + 5000) {
-							time = currentTime;
-							int maxIndex = -1;
-							for (int i = 0; i < recognizedActivityCounts.length; i++) {
-								if (recognizedActivityCounts[i] > maxIndex) {
-									maxIndex = i;
-								}
-								recognizedActivityCounts[i] = 0;
-							}
-							//Put your all data using put extra
-
-							final Intent broadcastIntent = new Intent();
-							broadcastIntent.putExtra("key", LABELS[maxIndex]);
-							broadcastIntent.setAction(Globals.ACTION_NAME);
-							sendBroadcast(broadcastIntent);
-						}
+						//Put your all data using put extra
+						final Intent broadcastIntent = new Intent();
+						broadcastIntent.putExtra("key", LABELS[indexDetectedActivity]);
+						broadcastIntent.setAction(Globals.ACTION_NAME);
+						sendBroadcast(broadcastIntent);
 
 					} else if (blockSize2 == Globals.ACCELEROMETER_BLOCK_CAPACITY) {
 						blockSize2 = 0;
@@ -260,27 +241,13 @@ public class SensorsService extends Service implements SensorEventListener {
 						featureVector2[Globals.ACCELEROMETER_BLOCK_CAPACITY] = max2;
 						final Double p = WekaClassifier.classify(featureVector);
 
-						int indexDetectedActivity = p.intValue();
-						recognizedActivityCounts2[indexDetectedActivity]++;
+						final int indexDetectedActivity = p.intValue();
 
-						final double currentTime = System.currentTimeMillis();
-						if (currentTime >= time2 + 5000) {
-							time2 = currentTime;
-							int maxIndex = -1;
-							for (int i = 0; i < recognizedActivityCounts2.length; i++) {
-								if (recognizedActivityCounts2[i] > maxIndex) {
-									maxIndex = i;
-								}
-								recognizedActivityCounts2[i] = 0;
-							}
-							//Put your all data using put extra
-
-							final Intent broadcastIntent = new Intent();
-							broadcastIntent.putExtra("key", LABELS[maxIndex]);
-							broadcastIntent.setAction(Globals.ACTION_NAME);
-							sendBroadcast(broadcastIntent);
-						}
-
+						//Put your all data using put extra
+						final Intent broadcastIntent = new Intent();
+						broadcastIntent.putExtra("key", LABELS[indexDetectedActivity]);
+						broadcastIntent.setAction(Globals.ACTION_NAME);
+						sendBroadcast(broadcastIntent);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
