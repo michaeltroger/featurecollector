@@ -11,3 +11,5 @@ Eapp/src/main/java/com/michaeltroger/collector1/CollectorActivity.java,1/5/1588
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
 k
 ;app/src/main/java/com/michaeltroger/collector1/Globals.java,8/9/8925f224ea15b15389b10ae4dfc5a8548402f3e2
+?
+settings.gradle,0/5/05efc8b1657769a27696d478ded1e95f38737233

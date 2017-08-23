@@ -148,25 +148,50 @@ public class SensorsService extends Service implements SensorEventListener {
 		protected Void doInBackground(Void... arg0) {
 
 			int blockSize = 0;
+			int blockSize2 = 0;
+
 			final FFT fft = new FFT(Globals.ACCELEROMETER_BLOCK_CAPACITY);
+
 			final double[] accBlock = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
 			final double[] re = accBlock;
 			final double[] im = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
 
+			final double[] accBlock2 = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
+			final double[] re2 = accBlock2;
+			final double[] im2 = new double[Globals.ACCELEROMETER_BLOCK_CAPACITY];
+
+			final int ACCELEROMETER_HALF_BLOCK_CAPACITY = Globals.ACCELEROMETER_BLOCK_CAPACITY / 2;
+			boolean isInitial = true;
+
 			double max = Double.MIN_VALUE;
+			double max2 = Double.MIN_VALUE;
 
 			final Double[] featureVector = new Double[Globals.ACCELEROMETER_BLOCK_CAPACITY+1];
+			final Double[] featureVector2 = new Double[Globals.ACCELEROMETER_BLOCK_CAPACITY+1];
+
 			int[] recognizedActivityCounts = new int[4];
+			int[] recognizedActivityCounts2 = new int[4];
+
 			double time = System.currentTimeMillis();
+			double time2 = System.currentTimeMillis();
 
 			while (true) {
 				try {
 					if (isCancelled()) {
 				        return null;
 				    }
-					
+
 					// Dumping buffer
-					accBlock[blockSize++] = mAccBuffer.take();
+					double buffer = mAccBuffer.take();
+					accBlock[blockSize++] = buffer;
+
+					if (!isInitial) {
+						accBlock2[blockSize2++] = buffer;
+					}
+
+					if (isInitial && blockSize == ACCELEROMETER_HALF_BLOCK_CAPACITY) {
+						isInitial = false;
+					}
 
 					if (blockSize == Globals.ACCELEROMETER_BLOCK_CAPACITY) {
 						blockSize = 0;
@@ -203,6 +228,50 @@ public class SensorsService extends Service implements SensorEventListener {
 									maxIndex = i;
 								}
 								recognizedActivityCounts[i] = 0;
+							}
+							//Put your all data using put extra
+
+							final Intent broadcastIntent = new Intent();
+							broadcastIntent.putExtra("key", LABELS[maxIndex]);
+							broadcastIntent.setAction(Globals.ACTION_NAME);
+							sendBroadcast(broadcastIntent);
+						}
+
+					} else if (blockSize2 == Globals.ACCELEROMETER_BLOCK_CAPACITY) {
+						blockSize2 = 0;
+
+						// time = System.currentTimeMillis();
+						max2 = .0;
+						for (final double val : accBlock2) {
+							if (max < val) {
+								max = val;
+							}
+						}
+
+						fft.fft(re2, im2);
+
+						for (int i = 0; i < re2.length; i++) {
+							double mag = Math.sqrt(re2[i] * re2[i] + im2[i] * im2[i]);
+							featureVector2[i] = mag;
+							im2[i] = .0; // Clear the field
+						}
+
+						// Append max after frequency component
+						featureVector2[Globals.ACCELEROMETER_BLOCK_CAPACITY] = max2;
+						final Double p = WekaClassifier.classify(featureVector);
+
+						int indexDetectedActivity = p.intValue();
+						recognizedActivityCounts2[indexDetectedActivity]++;
+
+						final double currentTime = System.currentTimeMillis();
+						if (currentTime >= time2 + 5000) {
+							time2 = currentTime;
+							int maxIndex = -1;
+							for (int i = 0; i < recognizedActivityCounts2.length; i++) {
+								if (recognizedActivityCounts2[i] > maxIndex) {
+									maxIndex = i;
+								}
+								recognizedActivityCounts2[i] = 0;
 							}
 							//Put your all data using put extra
 

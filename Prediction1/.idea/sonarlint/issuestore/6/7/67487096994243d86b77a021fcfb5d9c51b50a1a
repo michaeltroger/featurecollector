@@ -1,6 +1,5 @@
 
-@squid:S1068"+Remove this unused "mLabels" private field.(ÆâÓ™
-6squid:S1170"!Make this final field static too.(ÆâÓ™
-`squid:UselessImportCheck"2Remove this unused import 'android.widget.Button'.(²òıÿÿÿÿ8Äã·²Ş+
+;squid:S1170"!Make this final field static too.(ŞÚÍıÿÿÿÿÿ
 Fsquid:S1172"+Remove this unused method parameter "view".(©Ï”,8¾•¸²Ş+
+Esquid:S1068"+Remove this unused "mLabels" private field.(ŞÚÍıÿÿÿÿÿ
 Gsquid:S1172"+Remove this unused method parameter "view".(Õ›ÏÏ8â–¹²Ş+
