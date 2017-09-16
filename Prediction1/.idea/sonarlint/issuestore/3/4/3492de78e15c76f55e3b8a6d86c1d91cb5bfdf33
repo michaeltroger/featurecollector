@@ -1,22 +1,0 @@
-
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¯åÇ©úÿÿÿÿ8¶¯½»Þ+
-Dsquid:S1068"*Remove this unused "mLabel" private field.(ŸÖ£íÿÿÿÿÿ
-nsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 57 to the 15 allowed.(‰„çö8¶¯½»Þ+
-Ksquid:S2696"6Make the enclosing method "static" or remove this set.(…Æ´
-Wsquid:S2696"6Make the enclosing method "static" or remove this set.(ÝˆÎøÿÿÿÿ8Òä³¾Þ+
-Dsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8¶¯½»Þ+
-tsquid:S1450"_Remove the "mServiceTaskType" field and declare it as a local variable in the relevant methods.(çÎÁî
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¯åÇ©úÿÿÿÿ8åÊˆ†á+
-X
-squid:S899"8Do something with the "int" value returned by "drainTo".(é ÿ†þÿÿÿÿ8Òä³¾Þ+
-usquid:S00115"ZRename this constant name to match the regular expression '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'.(ÔþË†þÿÿÿÿ
-rsquid:S1450"]Remove the "mAccelerometer" field and declare it as a local variable in the relevant methods.(ŸÔ®
-msquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(æ›Ë8Èžü…á+
-Ysquid:S1854"8Remove this useless assignment to local variable "max2".(íÎ®§øÿÿÿÿ8¶¯½»Þ+
-Dsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8¶¯½»Þ+
-Fsquid:S1068",Remove this unused "mFeatLen" private field.(ÔþË†þÿÿÿÿ
-Isquid:S1068"4Remove this unused "mServiceTaskType" private field.(çÎÁî
-osquid:S1450"URemove the "mLabel" field and declare it as a local variable in the relevant methods.(ŸÖ£íÿÿÿÿÿ
-Esquid:S1068"0Remove this unused "mFeatureFile" private field.(ƒ£ð
-squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÐŠß±8¶¯½»Þ+
-bsquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8¶¯½»Þ+
