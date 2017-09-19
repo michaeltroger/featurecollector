@@ -5,7 +5,7 @@
  * 
  */
 
-package com.michaeltroger.collector1;
+package com.michaeltroger.featurecollector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +31,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
@@ -128,16 +129,20 @@ public class SensorsService extends Service implements SensorEventListener {
 						getResources()
 								.getString(
 										R.string.ui_sensor_service_notification_content))
-				.setSmallIcon(R.drawable.greend).setContentIntent(pi).build();
+				.setSmallIcon(R.drawable.ic_stat_name).setContentIntent(pi).build();
 		final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
 		notificationManager.notify(0, notification);
 
-
-		featureVectorTask = new FeatureVectorTask();
-		featureVectorTask.execute();
 		samplingTask = new SamplingTask();
-		samplingTask.execute();
+		featureVectorTask = new FeatureVectorTask();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			samplingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			featureVectorTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		} else {
+			samplingTask.execute();
+			featureVectorTask.execute();
+		}
 
 		return START_NOT_STICKY;
 	}

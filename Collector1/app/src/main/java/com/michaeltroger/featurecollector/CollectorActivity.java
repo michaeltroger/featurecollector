@@ -1,15 +1,19 @@
-package com.michaeltroger.collector1;
+package com.michaeltroger.featurecollector;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.michaeltroger.collector1.databinding.MainBinding;
+import com.michaeltroger.featurecollector.databinding.MainBinding;
 
 import java.io.File;
 
@@ -21,6 +25,7 @@ public class CollectorActivity extends Activity {
             Globals.CLASS_LABEL_RUNNING,
             Globals.CLASS_LABEL_OTHER
     };
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private MainBinding binding;
     private Intent mServiceIntent;
     private File mFeatureFile;
@@ -31,6 +36,17 @@ public class CollectorActivity extends Activity {
         COLLECTING,
         TRAINING,
         CLASSIFYING
+    }
+
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+            );
+        }
     }
 
     public class MyHandlers {
@@ -94,6 +110,12 @@ public class CollectorActivity extends Activity {
         mState = State.IDLE;
         mFeatureFile = new File(getExternalFilesDir(null), Globals.FEATURE_FILE_NAME);
         mServiceIntent = new Intent(this, SensorsService.class);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestPermission();
     }
 
     @Override

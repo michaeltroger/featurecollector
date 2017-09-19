@@ -1,7 +1,7 @@
 /**
  * Globals.java <p> Created by Xiaochao Yang on Dec 9, 2011 1:43:35 PM
  */
-package com.michaeltroger.collector1; /* More on class on constants: http://www.javapractices.com/topic/TopicAction.do?Id=2*/
+package com.michaeltroger.featurecollector; /* More on class on constants: http://www.javapractices.com/topic/TopicAction.do?Id=2*/
 
 public abstract class Globals { /* Debugging tag*/
     public static final String TAG = "MyRuns";

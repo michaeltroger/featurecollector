@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.1"
 
     defaultConfig {
-        applicationId "com.michaeltroger.collector1"
+        applicationId "com.michaeltroger.featurecollector"
         minSdkVersion 24
         targetSdkVersion 26
         jackOptions {
@@ -30,6 +30,8 @@ android {
 }
 
 dependencies {
+    compile 'com.android.support:appcompat-v7:26.0.2'
+
     compile files('libs/weka.jar')
     compile 'com.google.guava:guava:23.0-android'
 }
