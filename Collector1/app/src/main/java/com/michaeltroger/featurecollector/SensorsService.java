@@ -41,8 +41,8 @@ import com.meapsoft.FFT;
 
 public class SensorsService extends Service implements SensorEventListener {
 
-	private static final int mFeatLen = Globals.ACCELEROMETER_BLOCK_CAPACITY + 2;
-	
+	private static final int M_FEAT_LEN = Globals.ACCELEROMETER_BLOCK_CAPACITY + 2;
+	private static final boolean USE_OVERLAPPING_WINDOW = true;
 	private File mFeatureFile;
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
@@ -195,7 +195,7 @@ public class SensorsService extends Service implements SensorEventListener {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 
-			final Instance inst = new DenseInstance(mFeatLen);
+			final Instance inst = new DenseInstance(M_FEAT_LEN);
 			inst.setDataset(mDataset);
 
 			int blockSize = 0;
@@ -224,7 +224,7 @@ public class SensorsService extends Service implements SensorEventListener {
 				    }
 
 					// Dumping buffer
-					double buffer = mAccBuffer.take();
+					final double buffer = mAccBuffer.take();
 					accBlock[blockSize++] = buffer;
 
 					if (!isInitial) {
@@ -258,7 +258,7 @@ public class SensorsService extends Service implements SensorEventListener {
 						inst.setValue(Globals.ACCELEROMETER_BLOCK_CAPACITY, max);
 						inst.setValue(mClassAttribute, mLabel);
 						mDataset.add(inst);
-					} else if (blockSize2 == Globals.ACCELEROMETER_BLOCK_CAPACITY) {
+					} else if (USE_OVERLAPPING_WINDOW && blockSize2 == Globals.ACCELEROMETER_BLOCK_CAPACITY) {
 						blockSize2 = 0;
 
 						// time = System.currentTimeMillis();
