@@ -53,10 +53,10 @@ public class SensorsService extends Service implements SensorEventListener {
 	private FeatureVectorTask featureVectorTask;
 
 	private static final String[] LABELS = {
-			Globals.CLASS_LABEL_STANDING,
-			Globals.CLASS_LABEL_WALKING,
-			Globals.CLASS_LABEL_RUNNING,
-			Globals.CLASS_LABEL_OTHER
+		Globals.CLASS_LABEL_STANDING,
+		Globals.CLASS_LABEL_WALKING,
+		Globals.CLASS_LABEL_RUNNING,
+		Globals.CLASS_LABEL_OTHER
 	};
 
 
@@ -352,6 +352,7 @@ public class SensorsService extends Service implements SensorEventListener {
 
 	}
 
+	@Override
 	public void onSensorChanged(SensorEvent event) {
 
 		if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
@@ -363,7 +364,9 @@ public class SensorsService extends Service implements SensorEventListener {
 		}
 	}
 
+	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// accuracy is expected to not change
 	}
 
 	@Override

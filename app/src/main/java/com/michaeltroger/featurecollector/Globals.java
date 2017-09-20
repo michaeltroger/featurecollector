@@ -4,7 +4,6 @@
 package com.michaeltroger.featurecollector; /* More on class on constants: http://www.javapractices.com/topic/TopicAction.do?Id=2*/
 
 public abstract class Globals { /* Debugging tag*/
-    public static final String TAG = "MyRuns";
     public static final int ACCELEROMETER_BUFFER_CAPACITY = 2048;
     public static final int ACTIVITY_ID_STANDING = 0;
     public static final int ACTIVITY_ID_WALKING = 1;

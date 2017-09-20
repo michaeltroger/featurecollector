@@ -20,10 +20,10 @@ import java.io.File;
 public class CollectorActivity extends Activity {
 
     private static final String[] mLabels = {
-            Globals.CLASS_LABEL_STANDING,
-            Globals.CLASS_LABEL_WALKING,
-            Globals.CLASS_LABEL_RUNNING,
-            Globals.CLASS_LABEL_OTHER
+        Globals.CLASS_LABEL_STANDING,
+        Globals.CLASS_LABEL_WALKING,
+        Globals.CLASS_LABEL_RUNNING,
+        Globals.CLASS_LABEL_OTHER
     };
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private MainBinding binding;
